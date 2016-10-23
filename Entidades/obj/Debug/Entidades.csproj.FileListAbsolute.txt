@@ -1,0 +1,5 @@
+D:\GitHub\PAV2\FrutoMix\Entidades\obj\Debug\Entidades.csprojResolveAssemblyReference.cache
+D:\GitHub\PAV2\FrutoMix\Entidades\bin\Debug\Entidades.dll
+D:\GitHub\PAV2\FrutoMix\Entidades\bin\Debug\Entidades.pdb
+D:\GitHub\PAV2\FrutoMix\Entidades\obj\Debug\Entidades.dll
+D:\GitHub\PAV2\FrutoMix\Entidades\obj\Debug\Entidades.pdb
