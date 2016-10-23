@@ -1,0 +1,6 @@
+D:\GitHub\PAV2\FrutoMix\CapaPersistencia\bin\Debug\CapaPersistencia.dll.config
+D:\GitHub\PAV2\FrutoMix\CapaPersistencia\bin\Debug\CapaPersistencia.dll
+D:\GitHub\PAV2\FrutoMix\CapaPersistencia\bin\Debug\CapaPersistencia.pdb
+D:\GitHub\PAV2\FrutoMix\CapaPersistencia\obj\Debug\CapaPersistencia.csprojResolveAssemblyReference.cache
+D:\GitHub\PAV2\FrutoMix\CapaPersistencia\obj\Debug\CapaPersistencia.dll
+D:\GitHub\PAV2\FrutoMix\CapaPersistencia\obj\Debug\CapaPersistencia.pdb
