@@ -9,26 +9,26 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CapaLogica", "CapaLogica\Ca
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CapaPersistencia", "CapaPersistencia\CapaPersistencia.csproj", "{404CB00B-C4C9-4E47-B9D8-71F5943692AA}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CapaPresentacion(1)", "http://localhost:54680", "{D74C8F76-E11A-4CFB-9D25-9252DDD38E62}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SitioWeb", "http://localhost:54971", "{27CD7C5A-D0F5-4517-84DE-A6C62552C460}"
 	ProjectSection(WebsiteProperties) = preProject
 		UseIISExpress = "true"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
-		ProjectReferences = "{f54b798e-9a68-4704-913f-5badc786da30}|CapaLogica.dll;{404cb00b-c4c9-4e47-b9d8-71f5943692aa}|CapaPersistencia.dll;{a4661c99-006f-4aa2-819f-e9adbb4411e4}|Entidades.dll;"
-		Debug.AspNetCompiler.VirtualPath = "/localhost_54680"
-		Debug.AspNetCompiler.PhysicalPath = "CapaPresentacion\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_54680\"
+		ProjectReferences = "{f54b798e-9a68-4704-913f-5badc786da30}|CapaLogica.dll;{a4661c99-006f-4aa2-819f-e9adbb4411e4}|Entidades.dll;{404CB00B-C4C9-4E47-B9D8-71F5943692AA}|CapaPersistencia.dll;"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_54971"
+		Debug.AspNetCompiler.PhysicalPath = "SitioWeb\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_54971\"
 		Debug.AspNetCompiler.Updateable = "true"
 		Debug.AspNetCompiler.ForceOverwrite = "true"
 		Debug.AspNetCompiler.FixedNames = "false"
 		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/localhost_54680"
-		Release.AspNetCompiler.PhysicalPath = "CapaPresentacion\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_54680\"
+		Release.AspNetCompiler.VirtualPath = "/localhost_54971"
+		Release.AspNetCompiler.PhysicalPath = "SitioWeb\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_54971\"
 		Release.AspNetCompiler.Updateable = "true"
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
-		SlnRelativePath = "CapaPresentacion\"
+		SlnRelativePath = "SitioWeb\"
 		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
 EndProject
@@ -50,10 +50,10 @@ Global
 		{404CB00B-C4C9-4E47-B9D8-71F5943692AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{404CB00B-C4C9-4E47-B9D8-71F5943692AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{404CB00B-C4C9-4E47-B9D8-71F5943692AA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D74C8F76-E11A-4CFB-9D25-9252DDD38E62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D74C8F76-E11A-4CFB-9D25-9252DDD38E62}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D74C8F76-E11A-4CFB-9D25-9252DDD38E62}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{D74C8F76-E11A-4CFB-9D25-9252DDD38E62}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{27CD7C5A-D0F5-4517-84DE-A6C62552C460}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27CD7C5A-D0F5-4517-84DE-A6C62552C460}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27CD7C5A-D0F5-4517-84DE-A6C62552C460}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{27CD7C5A-D0F5-4517-84DE-A6C62552C460}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

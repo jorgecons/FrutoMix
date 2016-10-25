@@ -18,17 +18,11 @@ namespace CapaLogica
             
         }
 
-<<<<<<< HEAD
         public static DataTable listarProductos(String contiene, String orden)
         {
             return Persistencia.cargarProductos(contiene, orden);
-=======
-        public static List<Producto> listarProductos(String contiene, String orden)
-        {
-            DataTable dt = Persistencia.cargarProductos(contiene, orden);
-            
-            while(dt.)
->>>>>>> refs/remotes/origin/master
+
+ 
         }
     }
 }

@@ -7,7 +7,7 @@ using Entidades;
 using CapaPersistencia;
 namespace CapaLogica
 {
-    class GestorCliente
+    public static class GestorCliente
     {
 
 
@@ -16,7 +16,7 @@ namespace CapaLogica
 
 
             List<Cliente> clientes = new List<Cliente>();
-            return clientes = Persistencia.buscarCliente(busqueda);
+            return null;//clientes = Persistencia.buscarCliente(busqueda);
 
 
 

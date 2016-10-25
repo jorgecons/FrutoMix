@@ -11,7 +11,7 @@ public partial class Producto : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         //ViewState
-        ViewState["orden"]="nombre";
+        ViewState["orden"] = "nombre";
         //cargar DropDownList Frutos
         ddlFrutos.DataSource = GestorProducto.listarFrutos();
         ddlFrutos.DataTextField = "nombre";
@@ -26,7 +26,7 @@ public partial class Producto : System.Web.UI.Page
     }
     protected void butBuscar_Click(object sender, EventArgs e)
     {
-        
+
     }
     protected void gridProductos_PageIndexChanging(object sender, GridViewPageEventArgs e)
     {
@@ -35,7 +35,7 @@ public partial class Producto : System.Web.UI.Page
     }
     protected void gridProductos_SelectedIndexChanged(object sender, EventArgs e)
     {
-      
+
     }
     protected void gridProductos_Sorting(object sender, GridViewSortEventArgs e)
     {
@@ -53,14 +53,12 @@ public partial class Producto : System.Web.UI.Page
         pnlListado.Visible = false;
         pnlSeleccion.Visible = true;
 
-<<<<<<< HEAD
-=======
     }
     protected void btnConsultar_Click(object sender, EventArgs e)
     {
         pnlListado.Visible = false;
         pnlSeleccion.Visible = true;
         accion.Text = "Modificar";
->>>>>>> refs/remotes/origin/master
+
     }
 }

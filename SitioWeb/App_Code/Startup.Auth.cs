@@ -3,7 +3,7 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
 
-namespace CapaPresentacion
+namespace SitioWeb
 {
     public partial class Startup {
 
