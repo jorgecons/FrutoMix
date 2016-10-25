@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Entidades;
 namespace CapaPersistencia
 {
     public class Persistencia
@@ -46,5 +46,61 @@ namespace CapaPersistencia
            
             return dt;
         }
+
+
+
+
+        public static List<Cliente> buscarCliente(string nombreQueContenga)
+        {
+            List<Cliente> c = new List<Cliente>();
+            SqlDataReader dr;
+            SqlConnection cn = new SqlConnection();
+            cn.ConnectionString = cadenaConexion();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = cn;
+            try
+            {
+                cn.Open();
+
+
+                cmd.CommandText = "Select Id_Cliente, nombre, documento FROM Cliente where nombre like @Contiene";
+                cmd.Parameters.Add(new SqlParameter("@Contiene", "%" + nombreQueContenga + "%"));
+
+                dr = cmd.ExecuteReader();
+
+
+
+                while (dr.Read())
+                {
+                    Cliente a = new Cliente();
+                    a.id_cliente = (int)dr["Id_Cliente"];
+                    a.nombre = dr["nombre"].ToString();
+
+                    a.documento = Convert.ToInt16(dr["documento"]);
+
+                    c.Add(a);
+                }
+            }
+            catch (SqlException)
+            {
+
+                throw;
+            }
+
+
+
+
+
+            finally
+            {
+                cn.Close();
+
+            }
+            return c;
+        }
+
+
+
+
     }
 }
