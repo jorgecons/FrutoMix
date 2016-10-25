@@ -15,6 +15,7 @@
             Nombre:
             <asp:TextBox ID="txtProducto" runat="server"></asp:TextBox>
             &nbsp;<asp:Button ID="butBuscar" runat="server" OnClick="butBuscar_Click" Text="Buscar" />
+            <br />
             <asp:GridView ID="gridProductos" runat="server" AllowPaging="True" AllowSorting="True" AutoGenerateColumns="False" BackColor="White" BorderColor="#999999" BorderStyle="None" BorderWidth="1px" CellPadding="3" DataKeyNames="id_Producto" GridLines="Vertical" PageSize="5" OnPageIndexChanging="gridProductos_PageIndexChanging" OnSelectedIndexChanged="gridProductos_SelectedIndexChanged" OnSorting="gridProductos_Sorting">
                 <AlternatingRowStyle BackColor="#DCDCDC" />
                 <Columns>
@@ -38,6 +39,14 @@
                 <SortedDescendingCellStyle BackColor="#CAC9C9" />
                 <SortedDescendingHeaderStyle BackColor="#000065" />
             </asp:GridView>
+
+            <asp:Button ID="btnAgregar" runat="server" Text="Agregar" OnClick="btnAgregar_Click" />
+            &nbsp;<asp:Button ID="btnConsultar" runat="server" Text="Consultar" />
+            &nbsp;<asp:Button ID="btnModificar" runat="server" Text="Modificar" />
+            &nbsp;<asp:Button ID="btnEliminar" runat="server" Text="Eliminar" />
+
+
+
         </asp:Panel>
         
         <asp:Panel ID="pnlSeleccion" runat="server">

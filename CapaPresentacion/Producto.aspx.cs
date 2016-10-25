@@ -20,6 +20,9 @@ public partial class Producto : System.Web.UI.Page
 
         //cargar grilla con Productos
         MostrarListaProductos();
+
+        //deshabilito el panel
+        pnlSeleccion.Visible = false;
     }
     protected void butBuscar_Click(object sender, EventArgs e)
     {
@@ -44,5 +47,11 @@ public partial class Producto : System.Web.UI.Page
     {
         gridProductos.DataSource = GestorProducto.listarProductos(txtProducto.Text, ViewState["orden"].ToString());
         gridProductos.DataBind();
+    }
+    protected void btnAgregar_Click(object sender, EventArgs e)
+    {
+        pnlListado.Visible = false;
+        pnlSeleccion.Visible = true;
+
     }
 }
