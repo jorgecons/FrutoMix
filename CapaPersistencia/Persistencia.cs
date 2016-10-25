@@ -19,7 +19,7 @@ namespace CapaPersistencia
             
         }
 
-        public static DataTable buscar(string nombreQueContenga)
+        public static DataTable cargarFrutos()
         {
             SqlConnection cn = new SqlConnection();
             cn.ConnectionString = cadenaConexion();
@@ -29,21 +29,49 @@ namespace CapaPersistencia
                 cn.Open();
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = cn;
-                cmd.CommandText = "Select id_fruto, nombre from Fruto where nombre like @Contiene order by nombre";
-                cmd.Parameters.Add(new SqlParameter("@Contiene", "%" + nombreQueContenga + "%"));
+                cmd.CommandText = "Select id_fruto, nombre from Fruto ";
                
                 dt.Load(cmd.ExecuteReader());
             }
-            catch (SqlException)
+            catch (SqlException ex)
             {
                 
-                throw;
+                throw ex;
             }
             finally
             {
                 cn.Close();
             }
            
+            return dt;
+        }
+
+        public static DataTable cargarProductos(String contiene, String orden)
+        {
+            SqlConnection cn = new SqlConnection();
+            cn.ConnectionString = cadenaConexion();
+            DataTable dt = new DataTable();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = cn;
+                cmd.CommandText = "Select id_producto, nombre, codigo_barras, precio_vta, es_compuesto," +
+                 "descripcion, fecha_alta, fecha_baja from Producto where nombre like @Contiene order by "+orden;
+                cmd.Parameters.Add(new SqlParameter("@Contiene", "%" + contiene + "%"));
+                //cmd.Parameters.Add(new SqlParameter("@Orden", orden));
+                dt.Load(cmd.ExecuteReader());
+            }
+            catch (SqlException ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                cn.Close();
+            }
+
             return dt;
         }
     }

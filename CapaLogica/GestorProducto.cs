@@ -11,10 +11,15 @@ namespace CapaLogica
     public class GestorProducto
     {
 
-        public static DataTable buscar(String busqueda)
+        public static DataTable listarFrutos()
         {
-            return Persistencia.buscar(busqueda);
+            return Persistencia.cargarFrutos();
             
+        }
+
+        public static DataTable listarProductos(String contiene, String orden)
+        {
+            return Persistencia.cargarProductos(contiene, orden);
         }
     }
 }
