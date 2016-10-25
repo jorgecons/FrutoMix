@@ -14,6 +14,8 @@ namespace Entidades
         public String descripcion {get; set;}
         public float precioVenta {get; set;}
         public bool esCompuesto{get; set;}
+        public DateTime fechaAlta { get; set; }
+        public DateTime? fechaBaja { get; set; }
         public List<Fruto> frutos {get; set;}
 
         public void agregarFruto(Fruto fruto)

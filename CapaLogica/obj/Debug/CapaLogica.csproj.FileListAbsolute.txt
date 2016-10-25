@@ -1,9 +1,0 @@
-D:\GitHub\PAV2\FrutoMix\CapaLogica\bin\Debug\CapaLogica.dll
-D:\GitHub\PAV2\FrutoMix\CapaLogica\bin\Debug\CapaLogica.pdb
-D:\GitHub\PAV2\FrutoMix\CapaLogica\obj\Debug\CapaLogica.csprojResolveAssemblyReference.cache
-D:\GitHub\PAV2\FrutoMix\CapaLogica\obj\Debug\CapaLogica.dll
-D:\GitHub\PAV2\FrutoMix\CapaLogica\obj\Debug\CapaLogica.pdb
-D:\GitHub\PAV2\FrutoMix\CapaLogica\bin\Debug\CapaPersistencia.dll
-D:\GitHub\PAV2\FrutoMix\CapaLogica\bin\Debug\Entidades.dll
-D:\GitHub\PAV2\FrutoMix\CapaLogica\bin\Debug\CapaPersistencia.pdb
-D:\GitHub\PAV2\FrutoMix\CapaLogica\bin\Debug\Entidades.pdb

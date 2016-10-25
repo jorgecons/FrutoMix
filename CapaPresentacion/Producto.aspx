@@ -41,7 +41,11 @@
             </asp:GridView>
 
             <asp:Button ID="btnAgregar" runat="server" Text="Agregar" OnClick="btnAgregar_Click" />
+<<<<<<< HEAD
+            &nbsp;<asp:Button ID="btnConsultar" runat="server" Text="Consultar" />
+=======
             &nbsp;<asp:Button ID="btnConsultar" runat="server" Text="Consultar" OnClick="btnConsultar_Click" />
+>>>>>>> refs/remotes/origin/master
             &nbsp;<asp:Button ID="btnModificar" runat="server" Text="Modificar" />
             &nbsp;<asp:Button ID="btnEliminar" runat="server" Text="Eliminar" />
 
@@ -50,9 +54,12 @@
         </asp:Panel>
         
         <asp:Panel ID="pnlSeleccion" runat="server">
+<<<<<<< HEAD
+=======
 
             <asp:Label ID="accion" runat="server" Font-Size="Larger" ForeColor="#000099"></asp:Label>
             <br />
+>>>>>>> refs/remotes/origin/master
             <asp:DropDownList ID="ddlFrutos" runat="server"></asp:DropDownList>
         </asp:Panel>
 
