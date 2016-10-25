@@ -14,10 +14,10 @@ namespace CapaPersistencia
     {
         public static string cadenaConexion()
         {
-            return  ConfigurationManager.ConnectionStrings["FrutoMixDB"].ConnectionString;
-            
+            return ConfigurationManager.ConnectionStrings["FrutoMixDB"].ConnectionString;
+
             //return @"Data Source=(LocalDB)\v11.0;AttachDbFilename=D:\GitHub\PAV2\FrutoMix\CapaPersistencia\FrutoMixDB.mdf;Integrated Security=True;Connect Timeout=30";
-            
+
         }
 
         public static DataTable cargarFrutos()
@@ -31,19 +31,19 @@ namespace CapaPersistencia
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = cn;
                 cmd.CommandText = "Select id_fruto, nombre from Fruto ";
-               
+
                 dt.Load(cmd.ExecuteReader());
             }
             catch (SqlException ex)
             {
-                
+
                 throw ex;
             }
             finally
             {
                 cn.Close();
             }
-           
+
             return dt;
         }
 
@@ -58,7 +58,7 @@ namespace CapaPersistencia
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = cn;
                 cmd.CommandText = "Select id_producto, nombre, codigo_barras, precio_vta, es_compuesto," +
-                 "descripcion, fecha_alta, fecha_baja from Producto where nombre like @Contiene order by "+orden;
+                 "descripcion, fecha_alta, fecha_baja from Producto where nombre like @Contiene order by " + orden;
                 cmd.Parameters.Add(new SqlParameter("@Contiene", "%" + contiene + "%"));
                 //cmd.Parameters.Add(new SqlParameter("@Orden", orden));
                 dt.Load(cmd.ExecuteReader());
@@ -75,56 +75,53 @@ namespace CapaPersistencia
 
             return dt;
         }
-<<<<<<< HEAD
-=======
+
 
         public static List<Producto> Buscar(string contiene, string orden)
         {
-            //string CadenaConexion = "Data Source=maquis;Initial Catalog=Pymes;User ID=avisuales2;password=avisuales2";
-            SqlConnection cn = new SqlConnection();
-            //cn.ConnectionString = CadenaConexion;
-            cn.ConnectionString = cadenaConexion();
-            cn.Open();
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = cn;
-            cmd.CommandText = "Select id_producto, nombre, codigo_barras, precio_vta, es_compuesto," +
-                 "descripcion, fecha_alta, fecha_baja from Producto where nombre like @Contiene order by " + orden;
-            cmd.Parameters.Add(new SqlParameter("@Contiene", "%" + contiene + "%"));
-            SqlDataReader dr = cmd.ExecuteReader();
-            // con el resultado cargar un lista generica de clientes
-            List<Producto> Clientes = new List<Producto>();
-            while (dr.Read())
-            {
-                Producto p = new Producto();
-                p.idProducto = (int)dr["id_producto"];
-                p.nombre = dr["nombre"].ToString();
-                p.codigo= dr
+            ////string CadenaConexion = "Data Source=maquis;Initial Catalog=Pymes;User ID=avisuales2;password=avisuales2";
+            //SqlConnection cn = new SqlConnection();
+            ////cn.ConnectionString = CadenaConexion;
+            //cn.ConnectionString = cadenaConexion();
+            //cn.Open();
+            //SqlCommand cmd = new SqlCommand();
+            //cmd.Connection = cn;
+            //cmd.CommandText = "Select id_producto, nombre, codigo_barras, precio_vta, es_compuesto," +
+            //     "descripcion, fecha_alta, fecha_baja from Producto where nombre like @Contiene order by " + orden;
+            //cmd.Parameters.Add(new SqlParameter("@Contiene", "%" + contiene + "%"));
+            //SqlDataReader dr = cmd.ExecuteReader();
+            //// con el resultado cargar un lista generica de clientes
+            //List<Producto> Clientes = new List<Producto>();
+            //while (dr.Read())
+            //{
+            //    Producto p = new Producto();
+            //    p.idProducto = (int)dr["id_producto"];
+            //    p.nombre = dr["nombre"].ToString();
+            //   // p.codigo= dr;
 
-                if (dr["FechaNacimiento"] != DBNull.Value)  //nuleables   null != DBNull.Value
-                    c.FechaNacimiento = (DateTime)dr["FechaNacimiento"];
-                else
-                    c.FechaNacimiento = null;  // estaria demas porque es valor por defecto del nuleable
-                c.Provincia = dr["provincia"].ToString();
-               
-
-                //if (dr["cuit"] != DBNull.Value)
-                //{
-                //    c.Cuit = int.Parse(dr["cuit"]);
-                //}
+            //    //if (dr["FechaNacimiento"] != DBNull.Value)  //nuleables   null != DBNull.Value
+            //    //    c.FechaNacimiento = (DateTime)dr["FechaNacimiento"];
+            //    //else
+            //    //    c.FechaNacimiento = null;  // estaria demas porque es valor por defecto del nuleable
+            //    //c.Provincia = dr["provincia"].ToString();
 
 
-                Clientes.Add(c);
-            }
-            dr.Close();
-            cn.Close();
-
-            return Clientes;
+            //    //if (dr["cuit"] != DBNull.Value)
+            //    //{
+            //    //    c.Cuit = int.Parse(dr["cuit"]);
+            //    //}
 
 
+            //    Clientes.Add(c);
+            //}
+            //dr.Close();
+            //cn.Close();
+
+            //return Clientes;
+
+            return null;
         }
 
->>>>>>> refs/remotes/origin/master
+
     }
-
-
 }
