@@ -53,5 +53,14 @@ public partial class Producto : System.Web.UI.Page
         pnlListado.Visible = false;
         pnlSeleccion.Visible = true;
 
+<<<<<<< HEAD
+=======
+    }
+    protected void btnConsultar_Click(object sender, EventArgs e)
+    {
+        pnlListado.Visible = false;
+        pnlSeleccion.Visible = true;
+        accion.Text = "Modificar";
+>>>>>>> refs/remotes/origin/master
     }
 }
