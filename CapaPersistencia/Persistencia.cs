@@ -76,6 +76,67 @@ namespace CapaPersistencia
             return dt;
         }
 
+        public static Producto cargarProdId(int id)
+        {
+            Producto p = new Producto();
+            SqlDataReader dr = null;
+            SqlConnection cn = new SqlConnection();
+            cn.ConnectionString = cadenaConexion();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = cn;
+                cmd.CommandText = "Select p.id_producto, p.nombre, p.codigo_barras, p.precio_vta, p.es_compuesto, " +
+                    "p.descripcion, p.fecha_alta, p.fecha_baja, p.fecha_baja, fxp.porcentaje, f.id_fruto, f.nombre as fruto " +
+                    " FROM Producto p INNER JOIN FrutoXProducto fxp ON p.id_producto= fxp.id_producto " +
+                    "INNER JOIN Fruto f ON fxp.id_fruto=f.id_fruto " +
+                    " where p.id_producto=@id";
+                cmd.Parameters.Add(new SqlParameter("@id", id));
+                dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    p.idProducto = (int)dr["id_producto"];
+                    p.nombre = dr["nombre"].ToString();
+                    p.codigo = (int)dr["codigo_barras"];
+                    p.precioVenta = float.Parse(dr["precio_vta"].ToString());
+                    p.fechaAlta = DateTime.Parse(dr["fecha_alta"].ToString());
+                    p.descripcion = dr["descripcion"].ToString();
+                    if (dr["fecha_baja"] == DBNull.Value)
+                    {
+                        p.fechaBaja = null;
+                    }
+                    else
+                    {
+                        p.fechaBaja = DateTime.Parse(dr["fecha_baja"].ToString());
+                    }
+
+                    p.porcentaje = new List<int>();
+                    p.frutos = new List<Fruto>();
+
+                    p.porcentaje.Add((int)dr["porcentaje"]);
+                    Fruto f = new Fruto();
+                    f.idFruto = (int)dr["id_fruto"];
+                    f.nombre = dr["fruto"].ToString();
+                    p.frutos.Add(f);
+
+                }
+
+
+            }
+            catch (SqlException)
+            {
+                throw;
+            }
+            finally
+            {
+                dr.Close();
+                cn.Close();
+
+            }
+            return p;
+        }
+
 
         public static List<Producto> Buscar(string contiene, string orden)
         {

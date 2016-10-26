@@ -24,5 +24,12 @@ namespace CapaLogica
 
  
         }
+
+        public static Producto buscarPorId(int id)
+        {
+
+
+            return Persistencia.cargarProdId(id);
+        }
     }
 }

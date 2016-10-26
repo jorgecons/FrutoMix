@@ -17,7 +17,7 @@ namespace Entidades
         public DateTime fechaAlta { get; set; }
         public DateTime? fechaBaja { get; set; }
         public List<Fruto> frutos {get; set;}
-
+        public List<int> porcentaje { get; set; }
         public void agregarFruto(Fruto fruto)
         {
             //verifica que la lista no este vacía y que el fruto no este en la lista
