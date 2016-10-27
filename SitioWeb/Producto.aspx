@@ -11,7 +11,6 @@
     <form id="formulario" runat="server">
 
         <h1 style="text-align: center">Productos</h1>
-
         <asp:Panel ID="pnlListado" runat="server">
             <div style="margin-left: auto; margin-right: auto; text-align: center;">
                 <asp:Label ID="lblNombre" runat="server" Text="Producto: "></asp:Label>
@@ -49,7 +48,10 @@
                 &nbsp;<asp:Button ID="btnConsultar" runat="server" Text="Consultar" OnClick="btnConsultar_Click" />
                 &nbsp;<asp:Button ID="btnModificar" runat="server" Text="Modificar" />
                 &nbsp;<asp:Button ID="btnEliminar" runat="server" Text="Eliminar" />
-
+                <asp:RequiredFieldValidator runat="server" ErrorMessage="ingrese un nombre" 
+                ControlToValidate="txtNombre"
+                Display="Dynamic"
+                SetFocusOnError="true"></asp:RequiredFieldValidator>
             </div>
 
         </asp:Panel>

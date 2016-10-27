@@ -90,6 +90,7 @@ public partial class Producto : System.Web.UI.Page
     {
         pnlListado.Visible = false;
         pnlSeleccion.Visible = true;
+        bloquear(true);
         accion.Text = "Consultar";
         Entidades.Producto p = GestorProducto.buscarPorId((int)gridProductos.SelectedValue);
         txtProducto.Text = p.nombre;
@@ -104,25 +105,73 @@ public partial class Producto : System.Web.UI.Page
         txtPrecio.Text = p.precioVenta.ToString();
 
         ddlFrutos1.SelectedValue = p.frutos[0].idFruto.ToString();
+
         txtPorcentaje1.Text = p.porcentaje[0].ToString();
+
+        foreach (ListItem item in ddlFrutos1.Items)
+        {
+            item.Attributes.Add("disabled", "disabled");
+        }
+
         if (p.frutos.Count > 1)
         {
             ddlFrutos2.SelectedValue = p.frutos[1].idFruto.ToString();
+
             ddlFrutos2.Visible = true;
+            foreach (ListItem item in ddlFrutos2.Items)
+            {
+                item.Attributes.Add("disabled", "disabled");
+            }
+            lblFruto2.Visible = true;
+            lblPorcentaje2.Visible = true;
+            txtPorcentaje2.Visible = true;
             txtPorcentaje2.Text = p.porcentaje[1].ToString();
         }
         if (p.frutos.Count > 2)
         {
             ddlFrutos3.SelectedValue = p.frutos[2].idFruto.ToString();
-            ddlFrutos3.Visible = false;
+            ddlFrutos3.Visible = true;
+            foreach (ListItem item in ddlFrutos3.Items)
+            {
+                item.Attributes.Add("disabled", "disabled");
+            }
+            lblFruto13.Visible = true;
+            lblPorcentaje3.Visible = true;
+            txtPorcentaje3.Visible = true;
             txtPorcentaje3.Text = p.porcentaje[2].ToString();
         }
         if (p.frutos.Count > 3)
         {
             ddlFrutos4.SelectedValue = p.frutos[3].idFruto.ToString();
-            ddlFrutos4.Visible = false;
+            ddlFrutos4.Visible = true;
+            foreach (ListItem item in ddlFrutos4.Items)
+            {
+                item.Attributes.Add("disabled", "disabled");
+            }
+            lblFruto14.Visible = true;
+            lblPorcentaje4.Visible = true;
+            txtPorcentaje4.Visible = true;
             txtPorcentaje4.Text = p.porcentaje[3].ToString();
         }
 
+    }
+
+    private void bloquear(bool x)
+    {
+        txtProducto.ReadOnly = x;
+        txtId.ReadOnly = x;
+        txtCodigo.ReadOnly = x;
+        txtDescripcion.ReadOnly = x;
+        txtFechaAlta.ReadOnly = x;
+        txtFechaBaja.ReadOnly = x;
+        txtPrecio.ReadOnly = x;
+        ddlFrutos1.Enabled = x;
+        txtPorcentaje1.ReadOnly = x;
+        ddlFrutos2.Enabled = x;
+        txtPorcentaje2.ReadOnly = x;
+        ddlFrutos3.Enabled = x;
+        txtPorcentaje3.ReadOnly = x;
+        ddlFrutos4.Enabled = x;
+        txtPorcentaje4.ReadOnly = x;
     }
 }

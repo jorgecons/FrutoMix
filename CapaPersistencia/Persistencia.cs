@@ -79,6 +79,8 @@ namespace CapaPersistencia
         public static Producto cargarProdId(int id)
         {
             Producto p = new Producto();
+            p.porcentaje = new List<int>();
+            p.frutos = new List<Fruto>();
             SqlDataReader dr = null;
             SqlConnection cn = new SqlConnection();
             cn.ConnectionString = cadenaConexion();
@@ -94,7 +96,7 @@ namespace CapaPersistencia
                     " where p.id_producto=@id";
                 cmd.Parameters.Add(new SqlParameter("@id", id));
                 dr = cmd.ExecuteReader();
-                while (dr.Read())
+               while (dr.Read())
                 {
                     p.idProducto = (int)dr["id_producto"];
                     p.nombre = dr["nombre"].ToString();
@@ -111,8 +113,7 @@ namespace CapaPersistencia
                         p.fechaBaja = DateTime.Parse(dr["fecha_baja"].ToString());
                     }
 
-                    p.porcentaje = new List<int>();
-                    p.frutos = new List<Fruto>();
+                   
 
                     p.porcentaje.Add((int)dr["porcentaje"]);
                     Fruto f = new Fruto();
