@@ -47,7 +47,7 @@ namespace CapaPersistencia
             return dt;
         }
 
-        public static DataTable cargarProductos(String contiene, String orden)
+        public static DataTable cargarProductos(String contiene, String orden, String asc)
         {
             SqlConnection cn = new SqlConnection();
             cn.ConnectionString = cadenaConexion();
@@ -58,7 +58,7 @@ namespace CapaPersistencia
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = cn;
                 cmd.CommandText = "Select id_producto, nombre, codigo_barras, precio_vta, es_compuesto," +
-                 "descripcion, fecha_alta, fecha_baja from Producto where nombre like @Contiene order by " + orden;
+                 "descripcion, fecha_alta, fecha_baja from Producto where nombre like @Contiene order by " + orden + " " + asc;
                 cmd.Parameters.Add(new SqlParameter("@Contiene", "%" + contiene + "%"));
                 //cmd.Parameters.Add(new SqlParameter("@Orden", orden));
                 dt.Load(cmd.ExecuteReader());
@@ -90,13 +90,13 @@ namespace CapaPersistencia
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = cn;
                 cmd.CommandText = "Select p.id_producto, p.nombre, p.codigo_barras, p.precio_vta, p.es_compuesto, " +
-                    "p.descripcion, p.fecha_alta, p.fecha_baja, p.fecha_baja, fxp.porcentaje, f.id_fruto, f.nombre as fruto " +
+                    "p.descripcion, p.fecha_alta, p.fecha_baja, fxp.porcentaje, f.id_fruto, f.nombre as fruto " +
                     " FROM Producto p INNER JOIN FrutoXProducto fxp ON p.id_producto= fxp.id_producto " +
                     "INNER JOIN Fruto f ON fxp.id_fruto=f.id_fruto " +
                     " where p.id_producto=@id";
                 cmd.Parameters.Add(new SqlParameter("@id", id));
                 dr = cmd.ExecuteReader();
-               while (dr.Read())
+                while (dr.Read())
                 {
                     p.idProducto = (int)dr["id_producto"];
                     p.nombre = dr["nombre"].ToString();
@@ -113,7 +113,7 @@ namespace CapaPersistencia
                         p.fechaBaja = DateTime.Parse(dr["fecha_baja"].ToString());
                     }
 
-                   
+
 
                     p.porcentaje.Add((int)dr["porcentaje"]);
                     Fruto f = new Fruto();
@@ -138,6 +138,70 @@ namespace CapaPersistencia
             return p;
         }
 
+        public static int guardar(Producto prod)
+        {
+
+            SqlConnection cn = new SqlConnection();
+            cn.ConnectionString = cadenaConexion();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = cn;
+                cmd.CommandText = "insert into Producto " +
+                    "values (@nombre, @codigo, @precio, @esCompuesto, @descripcion, @fechaAlta, @fechaBaja); Select @@IDENTITY";
+                cmd.Parameters.Add(new SqlParameter("@nombre", prod.nombre));
+                cmd.Parameters.Add(new SqlParameter("@codigo", prod.codigo));
+                cmd.Parameters.Add(new SqlParameter("@precio", prod.precioVenta));
+                cmd.Parameters.Add(new SqlParameter("@esCompuesto", prod.esCompuesto));
+                if (prod.descripcion != null || prod.descripcion != "")
+                {
+                    cmd.Parameters.Add(new SqlParameter("@descripcion", prod.descripcion));
+                }
+                else
+                {
+                    cmd.Parameters.Add(new SqlParameter("@descripcion", DBNull.Value));
+                }
+                cmd.Parameters.Add(new SqlParameter("@fechaAlta", prod.fechaAlta));
+                if (prod.fechaBaja != null)
+                {
+                    cmd.Parameters.Add(new SqlParameter("@fechaBaja", prod.fechaBaja));
+                }
+                else
+                {
+                    cmd.Parameters.Add(new SqlParameter("@fechaBaja", DBNull.Value));
+                }
+
+
+                prod.idProducto = Convert.ToInt32(cmd.ExecuteScalar());
+
+                cmd.CommandText = "insert into FrutoXProducto " +
+                    "values (@idProd, @idFruto, @porcentaje)";
+                foreach (var fruto in prod.frutos)
+                {
+                    int a = 0;
+
+
+                    cmd.Parameters.Add(new SqlParameter("@idProd", prod.idProducto));
+                    cmd.Parameters.Add(new SqlParameter("@idFruto", fruto.idFruto));
+                    cmd.Parameters.Add(new SqlParameter("@porcentaje", prod.porcentaje[a]));
+                    cmd.ExecuteNonQuery();
+                    cmd.Parameters.Clear();
+                    a++;
+                }
+
+
+            }
+            catch (SqlException)
+            {
+                throw;
+            }
+            finally
+            {
+                cn.Close();
+            }
+            return prod.idProducto;
+        }
 
         public static List<Producto> Buscar(string contiene, string orden)
         {
@@ -184,6 +248,81 @@ namespace CapaPersistencia
             return null;
         }
 
+        public static void eliminar(int id)
+        {
+            SqlConnection cn = new SqlConnection();
+            cn.ConnectionString = cadenaConexion();
 
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = cn;
+                cmd.CommandText = "Delete from FrutoXProducto where id_producto=@id; " +
+                    "Delete from Producto where id_producto=@id ";
+                cmd.Parameters.Add(new SqlParameter("@id", id));
+
+
+                cmd.ExecuteNonQuery();
+            }
+            catch (SqlException ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                cn.Close();
+            }
+
+
+        }
+
+        public static void modificar(Producto prod)
+        {
+            SqlConnection cn = new SqlConnection();
+            cn.ConnectionString = cadenaConexion();
+
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = cn;
+                cmd.CommandText = "update Producto " +
+                    "set precio_vta=@precio, descripcion=@desc, fecha_baja=@fechaBaja " +
+                    "where id_producto=@id ";
+
+                cmd.Parameters.Add(new SqlParameter("@id", prod.idProducto));
+                cmd.Parameters.Add(new SqlParameter("@precio", prod.precioVenta));
+                if (prod.descripcion == "" || prod.descripcion == null)
+                {
+                    cmd.Parameters.Add(new SqlParameter("@desc", DBNull.Value));
+                }
+                else
+                {
+                    cmd.Parameters.Add(new SqlParameter("@desc", prod.descripcion));
+                }
+                if (prod.fechaBaja == null)
+                {
+                    cmd.Parameters.Add(new SqlParameter("@fechaBaja", DBNull.Value));
+                }
+                else
+                {
+                    cmd.Parameters.Add(new SqlParameter("@fechaBaja", prod.fechaBaja));
+                }
+
+
+                cmd.ExecuteNonQuery();
+            }
+            catch (SqlException ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                cn.Close();
+            }
+        }
     }
 }

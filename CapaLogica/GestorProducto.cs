@@ -18,9 +18,9 @@ namespace CapaLogica
             
         }
 
-        public static DataTable listarProductos(String contiene, String orden)
+        public static DataTable listarProductos(String contiene, String orden, String asc)
         {
-            return Persistencia.cargarProductos(contiene, orden);
+            return Persistencia.cargarProductos(contiene, orden, asc);
 
  
         }
@@ -30,6 +30,20 @@ namespace CapaLogica
 
 
             return Persistencia.cargarProdId(id);
+        }
+
+        public static int guardar(Producto prod)
+        {
+            return Persistencia.guardar(prod);
+        }
+
+        public static void eliminar(int id)
+        {
+            Persistencia.eliminar(id);
+        }
+        public static void modificar(Producto prod)
+        {
+            Persistencia.modificar(prod);
         }
     }
 }
