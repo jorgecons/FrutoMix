@@ -75,6 +75,11 @@ public partial class Producto : System.Web.UI.Page
     protected void gridProductos_SelectedIndexChanged(object sender, EventArgs e)
     {
         lblPrimero.Text = "";
+        for (int i = 0; i < gridProductos.Rows.Count; i++)
+        {
+            gridProductos.Rows[i].CssClass = "";
+        }
+        gridProductos.Rows[gridProductos.SelectedIndex].CssClass = "info";
     }
 
     protected void gridProductos_Sorting(object sender, GridViewSortEventArgs e)
@@ -241,58 +246,88 @@ public partial class Producto : System.Web.UI.Page
 
     protected void btnGuardar_Click(object sender, EventArgs e)
     {
+
         bloquear(false);
-        if (ViewState["accion"].ToString() == "agregar")
+        if (Page.IsValid)
         {
-            Entidades.Producto p = new Entidades.Producto();
-            p.nombre = txtProducto.Text;
-            p.codigo = int.Parse(txtCodigo.Text);
-            p.descripcion = txtDescripcion.Text;
-            p.fechaAlta = DateTime.Parse(txtFechaAlta.Text);
-            if (txtFechaBaja.Text != "")
+
+
+            if (ViewState["accion"].ToString() == "agregar")
             {
-                p.fechaBaja = DateTime.Parse(txtFechaBaja.Text);
-            }
-            p.precioVenta = int.Parse(txtPrecio.Text);
-            p.frutos = new List<Fruto>();
-            p.porcentaje = new List<int>();
-            int valor;
-            if (ddlFrutos1.SelectedValue != "-1")
-            {
-                Fruto fruto = new Fruto();
-                fruto.idFruto = int.Parse(ddlFrutos1.SelectedValue);
-                fruto.nombre = ddlFrutos1.SelectedItem.Text;
-                p.agregarFruto(fruto);
-                if (int.TryParse(txtPorcentaje1.Text, out valor))
+                Entidades.Producto p = new Entidades.Producto();
+                p.nombre = txtProducto.Text;
+                p.codigo = int.Parse(txtCodigo.Text);
+                p.descripcion = txtDescripcion.Text;
+                p.fechaAlta = DateTime.Parse(txtFechaAlta.Text);
+                if (txtFechaBaja.Text != "")
                 {
-                    if(valor>0 && valor<=100)
+                    DateTime baja = DateTime.Parse(txtFechaBaja.Text);
+                    if (baja.CompareTo(p.fechaAlta) > 0)
                     {
-                        p.porcentaje.Add(valor);
-                    }else
+                        p.fechaBaja = baja;
+                    }
+                    else
+                    {
+                        lblResultado.Text = "La fecha de baja debe ser posterior a la de alta.";
+                        txtFechaBaja.Focus();
+                        return;
+                    }
+                     
+                }
+                p.precioVenta = int.Parse(txtPrecio.Text);
+                p.frutos = new List<Fruto>();
+                p.porcentaje = new List<int>();
+                int valor;
+                if (ddlFrutos1.SelectedValue != "-1")
+                {
+                    Fruto fruto = new Fruto();
+                    fruto.idFruto = int.Parse(ddlFrutos1.SelectedValue);
+                    fruto.nombre = ddlFrutos1.SelectedItem.Text;
+                    p.agregarFruto(fruto);
+                    if (int.TryParse(txtPorcentaje1.Text, out valor))
+                    {
+                        if (valor > 0 && valor <= 100)
+                        {
+                            p.porcentaje.Add(valor);
+                        }
+                        else
+                        {
+                            lblErrorPorc1.Text = "Debe ingresar un porcentaje numérico entre 0 y 100";
+                            return;
+                        }
+
+                    }
+                    else
                     {
                         lblErrorPorc1.Text = "Debe ingresar un porcentaje numérico entre 0 y 100";
                         return;
                     }
-                    
+
                 }
                 else
                 {
-                    lblErrorPorc1.Text="Debe ingresar un porcentaje numérico entre 0 y 100";
+                    lblErrorPorc1.Text = "Seleccione al menos un fruto!";
+                    ddlFrutos1.Focus();
                     return;
                 }
-                
-            }
-            if (ddlFrutos2.SelectedValue != "-1")
-            {
-                Fruto fruto = new Fruto();
-                fruto.idFruto = int.Parse(ddlFrutos2.SelectedValue);
-                fruto.nombre = ddlFrutos2.SelectedItem.Text;
-                p.agregarFruto(fruto);
-                if (int.TryParse(txtPorcentaje2.Text, out valor))
+                if (ddlFrutos2.SelectedValue != "-1")
                 {
-                    if (valor > 0 && valor <= 100)
+                    Fruto fruto = new Fruto();
+                    fruto.idFruto = int.Parse(ddlFrutos2.SelectedValue);
+                    fruto.nombre = ddlFrutos2.SelectedItem.Text;
+                    p.agregarFruto(fruto);
+                    if (int.TryParse(txtPorcentaje2.Text, out valor))
                     {
-                        p.porcentaje.Add(valor);
+                        if (valor > 0 && valor <= 100)
+                        {
+                            p.porcentaje.Add(valor);
+                        }
+                        else
+                        {
+                            lblErrorPorc2.Text = "Debe ingresar un porcentaje numérico entre 0 y 100";
+                            return;
+                        }
+
                     }
                     else
                     {
@@ -301,24 +336,24 @@ public partial class Producto : System.Web.UI.Page
                     }
 
                 }
-                else
+                if (ddlFrutos3.SelectedValue != "-1")
                 {
-                    lblErrorPorc2.Text = "Debe ingresar un porcentaje numérico entre 0 y 100";
-                    return;
-                }
-                
-            }
-            if (ddlFrutos3.SelectedValue != "-1")
-            {
-                Fruto fruto = new Fruto();
-                fruto.idFruto = int.Parse(ddlFrutos3.SelectedValue);
-                fruto.nombre = ddlFrutos3.SelectedItem.Text;
-                p.agregarFruto(fruto);
-                if (int.TryParse(txtPorcentaje3.Text, out valor))
-                {
-                    if (valor > 0 && valor <= 100)
+                    Fruto fruto = new Fruto();
+                    fruto.idFruto = int.Parse(ddlFrutos3.SelectedValue);
+                    fruto.nombre = ddlFrutos3.SelectedItem.Text;
+                    p.agregarFruto(fruto);
+                    if (int.TryParse(txtPorcentaje3.Text, out valor))
                     {
-                        p.porcentaje.Add(valor);
+                        if (valor > 0 && valor <= 100)
+                        {
+                            p.porcentaje.Add(valor);
+                        }
+                        else
+                        {
+                            lblErrorPorc3.Text = "Debe ingresar un porcentaje numérico entre 0 y 100";
+                            return;
+                        }
+
                     }
                     else
                     {
@@ -326,26 +361,26 @@ public partial class Producto : System.Web.UI.Page
                         return;
                     }
 
-                }
-                else
-                {
-                    lblErrorPorc3.Text = "Debe ingresar un porcentaje numérico entre 0 y 100";
-                    return;
-                }
-                
 
-            }
-            if (ddlFrutos4.SelectedValue != "-1")
-            {
-                Fruto fruto = new Fruto();
-                fruto.idFruto = int.Parse(ddlFrutos4.SelectedValue);
-                fruto.nombre = ddlFrutos4.SelectedItem.Text;
-                p.agregarFruto(fruto);
-                if (int.TryParse(txtPorcentaje4.Text, out valor))
+                }
+                if (ddlFrutos4.SelectedValue != "-1")
                 {
-                    if (valor > 0 && valor <= 100)
+                    Fruto fruto = new Fruto();
+                    fruto.idFruto = int.Parse(ddlFrutos4.SelectedValue);
+                    fruto.nombre = ddlFrutos4.SelectedItem.Text;
+                    p.agregarFruto(fruto);
+                    if (int.TryParse(txtPorcentaje4.Text, out valor))
                     {
-                        p.porcentaje.Add(valor);
+                        if (valor > 0 && valor <= 100)
+                        {
+                            p.porcentaje.Add(valor);
+                        }
+                        else
+                        {
+                            lblErrorPorc4.Text = "Debe ingresar un porcentaje numérico entre 0 y 100";
+                            return;
+                        }
+
                     }
                     else
                     {
@@ -354,158 +389,172 @@ public partial class Producto : System.Web.UI.Page
                     }
 
                 }
+                if (p.frutos.Count > 1)
+                {
+                    p.esCompuesto = true;
+                }
                 else
                 {
-                    lblErrorPorc4.Text = "Debe ingresar un porcentaje numérico entre 0 y 100";
+                    p.esCompuesto = false;
+                }
+
+                if (!p.esCien())
+                {
+                    lblResultado.Text = "La suma de porcentajes debe ser 100";
+                    return;
+                }
+
+                int resutlado = GestorProducto.guardar(p);
+                if (resutlado < 0)
+                {
+                    lblResultado.Text = "El codigo ingresado ya pertenece a otro producto.";
+                    txtCodigo.Focus();
+                }
+                else
+                {
+                    txtId.Text = resutlado.ToString();
+                    bloquear(true);
+
+                    lblResultado.Text = "El producto " + txtNombre.Text + " se ha guardado exitosamente con id " + txtId.Text;
+                    String seleccion = ddlFrutos1.SelectedValue;
+                    foreach (ListItem item in ddlFrutos1.Items)
+                    {
+                        item.Attributes.Add("disabled", "disabled");
+                    }
+                    ddlFrutos1.SelectedValue = seleccion;
+
+                    seleccion = ddlFrutos2.SelectedValue;
+                    foreach (ListItem item in ddlFrutos2.Items)
+                    {
+                        item.Attributes.Add("disabled", "disabled");
+                    }
+
+                    ddlFrutos2.SelectedValue = seleccion;
+                    if (seleccion == "-1")
+                    {
+                        lblFruto2.Visible = false;
+                        ddlFrutos2.Visible = false;
+                        lblPorcentaje2.Visible = false;
+                        txtPorcentaje2.Visible = false;
+                    }
+                    seleccion = ddlFrutos3.SelectedValue;
+                    foreach (ListItem item in ddlFrutos3.Items)
+                    {
+                        item.Attributes.Add("disabled", "disabled");
+                    }
+                    if (seleccion == "-1")
+                    {
+                        lblFruto13.Visible = false;
+                        ddlFrutos3.Visible = false;
+                        lblPorcentaje3.Visible = false;
+                        txtPorcentaje3.Visible = false;
+                    }
+                    seleccion = ddlFrutos4.SelectedValue;
+                    foreach (ListItem item in ddlFrutos4.Items)
+                    {
+                        item.Attributes.Add("disabled", "disabled");
+                    }
+                    if (seleccion == "-1")
+                    {
+                        lblFruto14.Visible = false;
+                        ddlFrutos4.Visible = false;
+                        lblPorcentaje4.Visible = false;
+                        txtPorcentaje4.Visible = false;
+                    }
+                    btnGuardar.Text = "Nuevo";
+                    ViewState["accion"] = "nuevo";
+                    btnCancelar.Text = "Volver";
+                    MostrarListaProductos();
                     return;
                 }
 
             }
-            if (p.frutos.Count > 1)
-            {
-                p.esCompuesto = true;
-            }
-            else
-            {
-                p.esCompuesto = false;
-            }
 
-            if (!p.esCien())
+            if (ViewState["accion"].ToString() == "nuevo")
             {
-                lblResultado.Text = "La suma de porcentajes debe ser 100";
+                limpiar();
+                bloquear(false);
+                mostrar(true);
+                ViewState["accion"] = "agregar";
+                btnGuardar.Text = "Guardar";
+                btnCancelar.Text = "Cancelar";
                 return;
             }
 
-
-            txtId.Text = GestorProducto.guardar(p).ToString();
-            bloquear(true);
-
-            lblResultado.Text = "El producto " + txtNombre.Text + " se ha guardado exitosamente con id " + txtId.Text;
-            String seleccion = ddlFrutos1.SelectedValue;
-            foreach (ListItem item in ddlFrutos1.Items)
+            if (ViewState["accion"].ToString() == "consultar")
             {
-                item.Attributes.Add("disabled", "disabled");
-            }
-            ddlFrutos1.SelectedValue = seleccion;
+                btnGuardar.Text = "Eliminar";
 
-            seleccion = ddlFrutos2.SelectedValue;
-            foreach (ListItem item in ddlFrutos2.Items)
-            {
-                item.Attributes.Add("disabled", "disabled");
+                eliminar(int.Parse(txtId.Text));
+                limpiar();
+                lblResultado.Text = "Se ha eliminado el Producto exitosamente!";
+                btnGuardar.Enabled = false;
+
+                btnCancelar.Text = "Volver";
+                return;
             }
 
-            ddlFrutos2.SelectedValue = seleccion;
-            if (seleccion == "-1")
+            if (ViewState["accion"].ToString() == "modificar")
             {
-                lblFruto2.Visible = false;
-                ddlFrutos2.Visible = false;
-                lblPorcentaje2.Visible = false;
-                txtPorcentaje2.Visible = false;
-            }
-            seleccion = ddlFrutos3.SelectedValue;
-            foreach (ListItem item in ddlFrutos3.Items)
-            {
-                item.Attributes.Add("disabled", "disabled");
-            }
-            if (seleccion == "-1")
-            {
-                lblFruto13.Visible = false;
-                ddlFrutos3.Visible = false;
-                lblPorcentaje3.Visible = false;
-                txtPorcentaje3.Visible = false;
-            }
-            seleccion = ddlFrutos4.SelectedValue;
-            foreach (ListItem item in ddlFrutos4.Items)
-            {
-                item.Attributes.Add("disabled", "disabled");
-            }
-            if (seleccion == "-1")
-            {
-                lblFruto14.Visible = false;
-                ddlFrutos4.Visible = false;
-                lblPorcentaje4.Visible = false;
-                txtPorcentaje4.Visible = false;
-            }
-            btnGuardar.Text = "Nuevo";
-            ViewState["accion"] = "nuevo";
-            btnCancelar.Text = "Volver";
-            MostrarListaProductos();
-            return;
-        }
+                Entidades.Producto prod = new Entidades.Producto();
+                prod.idProducto = int.Parse(txtId.Text);
+                if (txtFechaBaja.Text != "")
+                {
+                    DateTime baja=DateTime.Parse(txtFechaBaja.Text);
+                    if (baja.CompareTo(prod.fechaAlta) > 0)
+                    {
+                        prod.fechaBaja = baja;
+                    }
+                    else
+                    {
+                        lblResultado.Text = "La fecha de baja debe ser posterior a la de alta";
+                        txtFechaBaja.Focus();
+                        return;
+                    }
+                    
+                }
+                prod.descripcion = txtDescripcion.Text;
+                prod.precioVenta = int.Parse(txtPrecio.Text);
+                GestorProducto.modificar(prod);
+                bloquear(true);
+                btnGuardar.Enabled = false;
+                btnCancelar.Text = "Volver";
+                string valor = ddlFrutos1.SelectedValue;
+                foreach (ListItem item in ddlFrutos1.Items)
+                {
+                    item.Attributes.Add("disabled", "disabled");
+                }
+                ddlFrutos1.SelectedValue = valor;
 
-        if (ViewState["accion"].ToString() == "nuevo")
-        {
-            limpiar();
-            bloquear(false);
-            mostrar(true);
-            ViewState["accion"] = "agregar";
-            btnGuardar.Text = "Guardar";
-            btnCancelar.Text = "Cancelar";
-            return;
-        }
+                valor = ddlFrutos2.SelectedValue;
+                foreach (ListItem item in ddlFrutos2.Items)
+                {
+                    item.Attributes.Add("disabled", "disabled");
+                }
 
-        if (ViewState["accion"].ToString() == "consultar")
-        {
-            btnGuardar.Text = "Eliminar";
-           
-            eliminar(int.Parse(txtId.Text));
-            limpiar();
-            lblResultado.Text = "Se ha eliminado el Producto exitosamente!";
-            btnGuardar.Enabled = false;
-            
-            btnCancelar.Text = "Volver";
-            return;
-        }
+                ddlFrutos2.SelectedValue = valor;
+                valor = ddlFrutos3.SelectedValue;
+                foreach (ListItem item in ddlFrutos3.Items)
+                {
+                    item.Attributes.Add("disabled", "disabled");
+                }
 
-        if (ViewState["accion"].ToString() == "modificar")
-        {
-            Entidades.Producto prod = new Entidades.Producto();
-            prod.idProducto = int.Parse(txtId.Text);
-            if (txtFechaBaja.Text != "")
-            {
-                prod.fechaBaja = DateTime.Parse(txtFechaBaja.Text);
-            }
-            prod.descripcion = txtDescripcion.Text;
-            prod.precioVenta = int.Parse(txtPrecio.Text);
-            GestorProducto.modificar(prod);
-            bloquear(true);
-            btnGuardar.Enabled = false;
-            btnCancelar.Text = "Volver";
-            string valor = ddlFrutos1.SelectedValue;
-            foreach (ListItem item in ddlFrutos1.Items)
-            {
-                item.Attributes.Add("disabled", "disabled");
-            }
-            ddlFrutos1.SelectedValue = valor;
-       
-            valor=ddlFrutos2.SelectedValue;
-            foreach (ListItem item in ddlFrutos2.Items)
-            {
-                item.Attributes.Add("disabled", "disabled");
-            }
-                
-            ddlFrutos2.SelectedValue = valor;
-            valor = ddlFrutos3.SelectedValue;
-            foreach (ListItem item in ddlFrutos3.Items)
-            {
-                item.Attributes.Add("disabled", "disabled");
-            }
-                
-            ddlFrutos3.SelectedValue = valor;
-           
-            valor=ddlFrutos4.SelectedValue;
-            foreach (ListItem item in ddlFrutos4.Items)
-            {
-                item.Attributes.Add("disabled", "disabled");
-            }    
-            ddlFrutos4.SelectedValue = valor;
-                
-            
-            lblResultado.Text = "El Producto ha sido modificado exitosamente!";
-            return;
+                ddlFrutos3.SelectedValue = valor;
+
+                valor = ddlFrutos4.SelectedValue;
+                foreach (ListItem item in ddlFrutos4.Items)
+                {
+                    item.Attributes.Add("disabled", "disabled");
+                }
+                ddlFrutos4.SelectedValue = valor;
+
+
+                lblResultado.Text = "El Producto ha sido modificado exitosamente!";
+                return;
 
 
 
+            }
         }
 
     }
@@ -530,6 +579,10 @@ public partial class Producto : System.Web.UI.Page
         lblPrimero.Text = "";
         lblResultado.Text = "";
         gridProductos.SelectedIndex = -1;
+        lblErrorPorc1.Text = "";
+        lblErrorPorc2.Text = "";
+        lblErrorPorc3.Text = "";
+        lblErrorPorc4.Text = "";
 
     }
 
@@ -551,6 +604,7 @@ public partial class Producto : System.Web.UI.Page
             pnlListado.Visible = false;
             pnlSeleccion.Visible = true;
             bloquear(true);
+            
             txtDescripcion.ReadOnly = false;
             txtFechaBaja.ReadOnly = false;
             txtPrecio.ReadOnly = false;
@@ -654,6 +708,13 @@ public partial class Producto : System.Web.UI.Page
         pnlSeleccion.Visible = false;
         pnlListado.Visible = true;
         MostrarListaProductos();
+
+        limpiar();
+        pnlSeleccion.Visible = false;
+        pnlListado.Visible = true;
+        MostrarListaProductos();
+
+
     }
 
 }

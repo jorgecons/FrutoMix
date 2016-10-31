@@ -1,0 +1,2 @@
+﻿DBCC CHECKIDENT ('[Producto]', RESEED, 10);
+GO

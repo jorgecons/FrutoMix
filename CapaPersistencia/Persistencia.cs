@@ -76,6 +76,56 @@ namespace CapaPersistencia
             return dt;
         }
 
+        public static List<Producto> cargarProdLista(String contiene, String orden, String asc)
+        {
+            SqlConnection cn = new SqlConnection();
+            cn.ConnectionString = cadenaConexion();
+            List<Producto> prods=new List<Producto>();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = cn;
+                cmd.CommandText = "Select id_producto, nombre, codigo_barras, precio_vta, es_compuesto," +
+                 "descripcion, fecha_alta, fecha_baja from Producto where nombre like @Contiene order by " + orden + " " + asc;
+                cmd.Parameters.Add(new SqlParameter("@Contiene", "%" + contiene + "%"));
+                //cmd.Parameters.Add(new SqlParameter("@Orden", orden));
+                SqlDataReader dr=cmd.ExecuteReader();
+                while(dr.Read())
+                {
+                    Producto p= new Producto();
+                    p.idProducto=(int)dr["id_producto"];
+                    p.nombre=dr["nombre"].ToString();
+                    p.codigo=(int)dr["codigo_barras"];
+                    p.esCompuesto = (bool)dr["es_Compuesto"];
+                    p.precioVenta = float.Parse(dr["precio_vta"].ToString());
+                    p.fechaAlta = DateTime.Parse(dr["fecha_alta"].ToString());
+                    p.descripcion = dr["descripcion"].ToString();
+                    if (dr["fecha_baja"] == DBNull.Value)
+                    {
+                        p.fechaBaja = null;
+                    }
+                    else
+                    {
+                        p.fechaBaja = DateTime.Parse(dr["fecha_baja"].ToString());
+                    }
+                    prods.Add(p);
+                }
+            }
+            catch (SqlException ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                cn.Close();
+            }
+
+            return prods;
+        
+        }
+
         public static Producto cargarProdId(int id)
         {
             Producto p = new Producto();
@@ -138,7 +188,7 @@ namespace CapaPersistencia
             return p;
         }
 
-        public static int guardar(Producto prod)
+        public static int guardarProd(Producto prod)
         {
 
             SqlConnection cn = new SqlConnection();
@@ -194,7 +244,7 @@ namespace CapaPersistencia
             }
             catch (SqlException)
             {
-                throw;
+                return -1;
             }
             finally
             {
@@ -203,7 +253,7 @@ namespace CapaPersistencia
             return prod.idProducto;
         }
 
-        public static List<Producto> Buscar(string contiene, string orden)
+        public static List<Producto> BuscarProd(string contiene, string orden)
         {
             ////string CadenaConexion = "Data Source=maquis;Initial Catalog=Pymes;User ID=avisuales2;password=avisuales2";
             //SqlConnection cn = new SqlConnection();
@@ -248,7 +298,7 @@ namespace CapaPersistencia
             return null;
         }
 
-        public static void eliminar(int id)
+        public static void eliminarProd(int id)
         {
             SqlConnection cn = new SqlConnection();
             cn.ConnectionString = cadenaConexion();
@@ -278,7 +328,7 @@ namespace CapaPersistencia
 
         }
 
-        public static void modificar(Producto prod)
+        public static void modificarProd(Producto prod)
         {
             SqlConnection cn = new SqlConnection();
             cn.ConnectionString = cadenaConexion();
@@ -323,6 +373,243 @@ namespace CapaPersistencia
             {
                 cn.Close();
             }
+        }
+
+
+        static string valoresParametros = "@nombre, @calle, @localidad, @numero_calle, @codigo_postal, @documento, @primera_Vez, @fechanacimiento, @email";
+
+        public static List<Cliente> buscarCliente(string busqueda)
+        {
+            List<Cliente> l = new List<Cliente>();
+
+            string sql = "";
+
+
+            sql = "select  c.id_cliente, c.nombre, c.documento, c.fecha_nacimiento, c.email, c.localidad, l.nombreLoc  from Cliente c inner join Localidad l  on c.localidad=l.id_localidad " +
+                      " WHERE nombre LIKE @contiene ";
+
+
+            SqlConnection cn = new SqlConnection(cadenaConexion());
+
+            try
+            {
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.Parameters.Add(new SqlParameter("@Contiene", "%" + busqueda + "%"));
+                cn.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    Cliente a = new Cliente();
+
+                    a.id_cliente = (int)dr["id_cliente"];
+                    a.nombre = dr["nombre"].ToString();
+                    a.documento = (int)dr["documento"];
+                    a.fecha_nacimiento = DateTime.Parse(dr["fecha_nacimiento"].ToString());
+                    a.email = dr["email"].ToString();
+                    a.localidad = dr["localidad"].ToString();
+                    a.nom_localidad = dr["nombreLoc"].ToString();
+
+                    l.Add(a);
+
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (cn != null && cn.State == System.Data.ConnectionState.Open)
+                    cn.Close();
+            }
+            return l;
+
+
+
+
+        }
+
+
+        public static List<String> cargarComboProv()
+        {
+            List<String> lista = new List<string>();
+
+            SqlConnection cn = new SqlConnection(cadenaConexion());
+
+            cn.Open();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = cn;
+            cmd.CommandText = "SELECT id_localidad, nombreLoc FROM Localidad";
+            SqlDataReader dr = cmd.ExecuteReader();
+            while (dr.Read())
+            {
+                lista.Add(dr["nombreLoc"].ToString());
+            }
+            dr.Close();
+            cn.Close();
+            return lista;
+        }
+
+
+
+        public static bool AgregarCliente(Cliente cli)
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(cadenaConexion());
+                cn.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = cn;
+                cmd.CommandText = @"INSERT INTO Cliente ( nombre, calle, localidad, numero_calle, codigo_postal, documento, primera_Vez, fecha_nacimiento, email) values (" + valoresParametros + ")";
+                //"@id_cliente, @nombre, @calle, @localidad, @numero_calle, @codigo_postal, @documento, @primera_Vez, @fechanacimiento";
+
+                cmd.Parameters.AddWithValue("@nombre", cli.nombre);
+                cmd.Parameters.AddWithValue("@calle", cli.calle);
+                cmd.Parameters.AddWithValue("@localidad", cli.localidad);
+                cmd.Parameters.AddWithValue("@email", cli.email);
+                cmd.Parameters.AddWithValue("@numero_calle", cli.numero_calle);
+
+                cmd.Parameters.AddWithValue("@fechanacimiento", cli.fecha_nacimiento.ToString());
+
+                cmd.Parameters.AddWithValue("@codigo_postal", cli.codigo_postal);
+                cmd.Parameters.AddWithValue("@documento", cli.documento);
+                cmd.Parameters.AddWithValue("@primera_Vez", cli.primera_Vez.ToString());
+                cmd.ExecuteNonQuery();
+                cn.Close();
+                return true;
+            }
+
+            catch
+            {
+
+                return false;
+            }
+        }
+
+        public static Cliente BuscarCliente(int id)
+        {
+
+
+            string sql = "select id_cliente, nombre, documento, fecha_nacimiento, email, localidad, calle, primera_Vez, numero_calle, codigo_postal  from Cliente  where id_cliente = @id ";
+
+            SqlConnection cn = new SqlConnection(cadenaConexion());
+            Cliente a = new Cliente();
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand(sql, cn);
+                cmd.Parameters.Add(new SqlParameter("@id", id));
+                SqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+
+                    a.id_cliente = int.Parse(dr["id_cliente"].ToString());
+                    a.nombre = dr["nombre"].ToString();
+                    a.documento = Int64.Parse(dr["documento"].ToString());
+                    a.fecha_nacimiento = DateTime.Parse(dr["fecha_nacimiento"].ToString());
+                    a.email = dr["email"].ToString();
+                    a.localidad = dr["localidad"].ToString();
+                    a.calle = dr["calle"].ToString();
+
+                    a.numero_calle = int.Parse(dr["numero_calle"].ToString());
+
+                    a.codigo_postal = int.Parse(dr["codigo_postal"].ToString());
+
+                    a.primera_Vez = bool.Parse(dr["primera_Vez"].ToString());
+
+
+
+
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (cn != null && cn.State == ConnectionState.Open)
+                {
+                    cn.Close();
+                }
+            }
+            return a;
+
+
+
+        }
+
+        public static void EliminarCliente(int id)
+        {
+
+
+            SqlConnection cn = new SqlConnection(cadenaConexion());
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = cn;
+                cmd.CommandText = "delete from Cliente where id_cliente=@codBarra";
+                cmd.CommandType = CommandType.Text;
+                cmd.Parameters.Add(new SqlParameter("@codBarra", id));
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (cn != null && cn.State == ConnectionState.Open)
+                {
+                    cn.Close();
+                }
+            }
+
+        }
+
+        public static void EditarCliente(Cliente a)
+        {
+
+
+            SqlConnection cn = new SqlConnection(cadenaConexion());
+            try
+            {
+                cn.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = cn;
+                //cmd.CommandText = "update Cliente set  nombre= @nombre, calle=@calle, localidad=@localidad, numero_calle=@numero_calle, codigo_postal=@codigo_postal, documento=@documento, primera_Vez=@primera_Vez, fecha_nacimiento=@fechanacimiento, email=@email  where id_cliente = @codBarra";
+                cmd.CommandText = "update Cliente set  nombre= @nombre, calle=@calle, localidad=@localidad, numero_calle=@numero_calle, codigo_postal=@codigo_postal, documento=@documento, primera_Vez=@primera_Vez, fecha_nacimiento=@fechanacimiento, email=@email   where id_cliente = @codBarra";
+                cmd.CommandType = CommandType.Text;
+                cmd.Parameters.Add(new SqlParameter("@codBarra", a.id_cliente));
+
+                cmd.Parameters.AddWithValue("@nombre", a.nombre);
+
+                cmd.Parameters.AddWithValue("@calle", a.calle);
+                cmd.Parameters.AddWithValue("@localidad", a.localidad);
+                cmd.Parameters.AddWithValue("@numero_calle", a.numero_calle);
+                cmd.Parameters.AddWithValue("@codigo_postal", a.codigo_postal);
+                cmd.Parameters.AddWithValue("@documento", a.documento);
+                cmd.Parameters.AddWithValue("@primera_Vez", a.primera_Vez.ToString());
+                cmd.Parameters.AddWithValue("@fechanacimiento", a.fecha_nacimiento.ToString());
+                cmd.Parameters.AddWithValue("@email", a.email.ToString());
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                if (cn != null && cn.State == ConnectionState.Open)
+                {
+                    cn.Close();
+                }
+            }
+
+
+
+
         }
     }
 }
