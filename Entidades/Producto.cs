@@ -17,15 +17,46 @@ namespace Entidades
         public DateTime fechaAlta { get; set; }
         public DateTime? fechaBaja { get; set; }
         public List<Fruto> frutos {get; set;}
-
+        public List<int> porcentaje { get; set; }
+        
         public void agregarFruto(Fruto fruto)
         {
-            //verifica que la lista no este vacía y que el fruto no este en la lista
-            if (frutos.Count != 0 && frutos.Any(f => f.idFruto != fruto.idFruto))
+            if (frutos == null)
             {
+                frutos = new List<Fruto>();
                 frutos.Add(fruto);
             }
+            else
+            {
+                if (frutos.Count != 0)
+                {
+                    foreach (var f in frutos)
+                    {
+                        if (f.idFruto == fruto.idFruto)
+                        {
+                            return;
+                        }
+
+                    }
+                    frutos.Add(fruto);
+
+                }
+                else
+                {
+                    frutos.Add(fruto);
+                }
+            }
+            
         }
 
+        public bool esCien()
+        {
+            int suma=0;
+            foreach (var porc in porcentaje)
+            {
+                suma += porc;
+            }
+            return suma == 100;
+        }
     }
 }
